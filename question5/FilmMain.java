@@ -1,19 +1,22 @@
+import java.io.*;
+import java.util.Scanner;
+
 class Film {
   String name, language, leadActor, category;
   int duration, yearOfRelease;
 
   Film() {
     name = language = leadActor = category = "";
-    duration = 0;
+    duration = yearOfRelease = 0;
   }
 
-  Film(String name, String language, String leadActor, String category, int duration) {
+  Film(String name, String language, String leadActor, String category, int duration, int yearOfRelease) {
     this.name = name;
     this.language = language;
     this.leadActor = leadActor;
     this.category = category;
     this.duration = duration;
-    this.yearOfRelease = 0;
+    this.yearOfRelease = yearOfRelease;
   }
 
   void setName(String name) {
@@ -28,6 +31,10 @@ class Film {
     this.leadActor = leadActor.toLowerCase();
   }
 
+  void setCategory(String category) {
+    this.category = category;
+  }
+
   void setDuration(int duration) {
     this.duration = duration;
   }
@@ -38,18 +45,23 @@ class Film {
 
 
   String getName() {
-    returnName = this.name.substring(0,1).toUpperCase() + this.name.substring(1);
+    String returnName = this.name.substring(0,1).toUpperCase() + this.name.substring(1);
     return returnName;
   }
 
   String getLanguage() {
-    returnLanguage = this.language.substring(0,1).toUpperCase() + this.language.substring(1);
+    String returnLanguage = this.language.substring(0,1).toUpperCase() + this.language.substring(1);
     return returnLanguage;
   }
 
   String getLeadActor() {
-    returnLeadActor = this.leadActor.substring(0,1).toUpperCase() + this.leadActor.substring(1);
-    return this.leadActor;
+    String returnLeadActor = this.leadActor.substring(0,1).toUpperCase() + this.leadActor.substring(1);
+    return returnLeadActor;
+  }
+
+  String getCategory() {
+    String returnCategory = this.category.substring(0,1).toUpperCase() + this.category.substring(1);
+    return returnCategory;
   }
 
   int getDuration() {
@@ -128,5 +140,44 @@ class Film {
 class FilmMain {
   public static void main(String args[]) {
 
+    Scanner scanner = new Scanner(System.in);
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    int n;
+
+    System.out.print('Enter the number of movies: ');
+    n = scanner.nextInt();
+
+    Film[] films = new Film[n];
+    Film film = new Film();
+    int numOfFilms = 0;
+
+    for(int i = 0; i<n; i++) {
+      System.out.print("Enter film name: ");
+      String fname = br.readline();
+      film.setName(fname);
+
+      System.out.print("Enter film language: ");
+      String lang = br.readline();
+      film.setLanguage(lang);
+
+      System.out.print("Enter film lead actor: ");
+      String lead = br.readline();
+      film.setLeadActor(lead);
+
+      System.out.print("Enter film category: ");
+      String category = br.readline();
+      film.setCategory(category);
+
+      System.out.print("Enter duration of the film: ");
+      int duration = Integer.parseInt(br.readline());
+      film.setDuration(duration);
+
+      System.out.print("Enter the year of release: ");
+      int yor = Integer.parseInt(br.readline());
+      film.setYearOfRelease(yor);
+
+      films[numOfFilms++] = film;
+    }
   }
 }
