@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 class Film {
   private String name, language, leadActor, category;
@@ -71,15 +72,6 @@ class Film {
   public int getYearOfRelease() {
     return this.yearOfRelease;
   }
-
-  // Film[] getArnoldFilms(Film films[]) {
-  //   Film[] arnoldFilms = new Film[film.length]
-  //   for(Film film: films){
-  //     if(film.leadActor == "Arnold") {}
-  //   }
-  // }
-
-
 }
 
 class SourceOfFunctions {
@@ -106,58 +98,57 @@ class SourceOfFunctions {
     return array2d;
   }
 
-  Film[] getRajiniFilms(Film films[]) {
-    Film[] rajiniFilms = new Film[films.length];
+  ArrayList<Film> getRajiniFilms(ArrayList<Film> films) {
+    ArrayList<Film> rajiniFilms = new ArrayList<Film>();
     int count = 0;
 
     for(Film film: films) {
       if((film.getLeadActor() == "rajinikanth" || film.getLeadActor() == "rajini") && (film.getLanguage() == "tamil"))
-        rajiniFilms[count++] = film;
+        rajiniFilms.add(film);
     }
 
     return rajiniFilms;
   }
 
-  Film[] getArnoldFilms(Film films[]) {
-    Film[] arnoldFilms = new Film[films.length];
-    int count = 0;
+  ArrayList<Film> getArnoldFilms(ArrayList<Film> films) {
+    ArrayList<Film> arnoldFilms = new ArrayList<Film>();
+    // int count = 0;
 
     for(Film film: films) {
       if((film.getLeadActor() == "arnold" || film.getLeadActor() == "arnold") && (film.getLanguage() == "english"))
-        arnoldFilms[count++] = film;
+        arnoldFilms.add(film);
     }
 
     return arnoldFilms;
   }
 
-  Film[] getComedyFilms(Film films[]) {
-    Film[] comedyFilms = new Film[films.length];
-    int count = 0;
+  ArrayList<Film> getComedyFilms(ArrayList<Film> films) {
+    ArrayList<Film> comedyFilms = new ArrayList<Film>();
 
     for(Film film: films) {
       if(film.getCategory() == "comedy")
-        comedyFilms[count++] = film;
+        comedyFilms.add(film);
     }
 
     return comedyFilms;
   }
 
-  Film[] getComedyFilms(Film films[], String actor) {
-    Film[] comedyFilmsWithActor = new Film[films.length];
+  ArrayList<Film> getComedyFilms(ArrayList<Film> films, String actor) {
+    ArrayList<Film> comedyFilmsWithActor = new ArrayList<Film>();
     actor = actor.toLowerCase();
     int count = 0;
 
     for(Film film: films) {
       if(film.getCategory() == "comedy" && film.getLeadActor() == actor)
-        comedyFilmsWithActor[count++] = film;
+        comedyFilmsWithActor.add(film);
     }
 
     return comedyFilmsWithActor;
   }
 
-  Film getShortestFilm(Film[] films) {
+  Film getShortestFilm(ArrayList<Film> films) {
 
-    Film shortestFilm = films[0];
+    Film shortestFilm = films.get(0);
     for(Film film: films) {
       if(shortestFilm.getDuration() > film.getDuration())
         shortestFilm = film;
@@ -178,7 +169,8 @@ class FilmMain {
     System.out.print("Enter the number of movies: ");
     n = scanner.nextInt();
 
-    Film[] films = new Film[n];
+    // Film[] films = new Film[n];
+    ArrayList<Film> films = new ArrayList<Film>();
     Film film = new Film();
     int numOfFilms = 0;
 
@@ -209,17 +201,17 @@ class FilmMain {
       int yor = Integer.parseInt(br.readLine());
       film.setYearOfRelease(yor);
 
-      films[numOfFilms++] = film;
+      films.add(film);
     }
 
     SourceOfFunctions sof = new SourceOfFunctions();
 
-    Film[] rajiniFilms = sof.getRajiniFilms(films);
-    System.out.println(rajiniFilms.length);
-    Film[] arnoldFilms = sof.getArnoldFilms(films);
-    System.out.println(arnoldFilms.length);
-    Film[] comedyFilms = sof.getComedyFilms(films);
-    System.out.println(comedyFilms.length);
+    ArrayList<Film> rajiniFilms = sof.getRajiniFilms(films);
+    System.out.println(rajiniFilms.size());
+    ArrayList<Film> arnoldFilms = sof.getArnoldFilms(films);
+    System.out.println(arnoldFilms.size());
+    ArrayList<Film> comedyFilms = sof.getComedyFilms(films);
+    System.out.println(comedyFilms.size());
 
     for(Film rajiniFilm: rajiniFilms) {
       System.out.println("Film name: " + rajiniFilm.getName());
@@ -254,7 +246,7 @@ class FilmMain {
     System.out.println("Enter the actor to get his comedy movies: ");
     String actor = br.readLine();
 
-    Film[] actorComedyFilms = sof.getComedyFilms(films, actor);
+    ArrayList<Film> actorComedyFilms = sof.getComedyFilms(films, actor);
 
     for(Film comedyFilm: actorComedyFilms) {
       System.out.println("Film name: " + comedyFilm.getName());
