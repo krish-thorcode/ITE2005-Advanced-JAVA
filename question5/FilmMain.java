@@ -2,15 +2,15 @@ import java.io.*;
 import java.util.Scanner;
 
 class Film {
-  String name, language, leadActor, category;
-  int duration, yearOfRelease;
+  private String name, language, leadActor, category;
+  private int duration, yearOfRelease;
 
-  Film() {
+  public Film() {
     name = language = leadActor = category = "";
     duration = yearOfRelease = 0;
   }
 
-  Film(String name, String language, String leadActor, String category, int duration, int yearOfRelease) {
+  public Film(String name, String language, String leadActor, String category, int duration, int yearOfRelease) {
     this.name = name;
     this.language = language;
     this.leadActor = leadActor;
@@ -19,102 +19,70 @@ class Film {
     this.yearOfRelease = yearOfRelease;
   }
 
-  void setName(String name) {
+  public void setName(String name) {
     this.name = name.toLowerCase();
   }
 
-  void setLanguage(String language) {
+  public void setLanguage(String language) {
     this.language = language.toLowerCase();
   }
 
-  void setLeadActor(String leadActor) {
+  public void setLeadActor(String leadActor) {
     this.leadActor = leadActor.toLowerCase();
   }
 
-  void setCategory(String category) {
+  public void setCategory(String category) {
     this.category = category;
   }
 
-  void setDuration(int duration) {
+  public void setDuration(int duration) {
     this.duration = duration;
   }
 
-  void setYearOfRelease(int yearOfRelease) {
+  public void setYearOfRelease(int yearOfRelease) {
     this.yearOfRelease = yearOfRelease;
   }
 
 
-  String getName() {
+  public String getName() {
     String returnName = this.name.substring(0,1).toUpperCase() + this.name.substring(1);
     return returnName;
   }
 
-  String getLanguage() {
+  public String getLanguage() {
     String returnLanguage = this.language.substring(0,1).toUpperCase() + this.language.substring(1);
     return returnLanguage;
   }
 
-  String getLeadActor() {
+  public String getLeadActor() {
     String returnLeadActor = this.leadActor.substring(0,1).toUpperCase() + this.leadActor.substring(1);
     return returnLeadActor;
   }
 
-  String getCategory() {
+  public String getCategory() {
     String returnCategory = this.category.substring(0,1).toUpperCase() + this.category.substring(1);
     return returnCategory;
   }
 
-  int getDuration() {
+  public int getDuration() {
     return this.duration;
   }
 
-  int getYearOfRelease() {
+  public int getYearOfRelease() {
     return this.yearOfRelease;
   }
 
-  // Film[] getArnoldMovies(Film films[]) {
+  // Film[] getArnoldFilms(Film films[]) {
   //   Film[] arnoldFilms = new Film[film.length]
   //   for(Film film: films){
-  //     if(film.leadActor == 'Arnold') {}
+  //     if(film.leadActor == "Arnold") {}
   //   }
   // }
 
-  Film[] getRajiniFilms(Film films[]) {
-    Film[] rajiniFilms = new Film[films.length];
-    int count = 0;
 
-    for(Film film: films) {
-      if((film.leadActor == "rajinikanth" || film.leadActor == "rajini") && (film.language == "tamil"))
-        rajiniFilms[count++] = film;
-    }
+}
 
-    return rajiniFilms;
-  }
-
-  Film getComedyFilms(Film films[]) {
-    Film[] comedyFilms = new Film[films.length];
-    int count = 0;
-
-    for(Film film: films) {
-      if(film.category == "comedy")
-        comedyFilms[count++] = film;
-    }
-
-    return comedyFilms;
-  }
-
-  Film getComedyFilms(Film films[], String actor) {
-    Film[] comedyFilmsWithActor = new Film[films.length];
-    actor = actor.toLowerCase();
-    int count = 0;
-
-    for(Film film: films) {
-      if(film.category == "comedy" && film.leadActor == actor)
-        comedyFilmsWithActor[count++] = film;
-    }
-
-    return comedyFilmsWithActor;
-  }
+class SourceOfFunctions {
 
   Film[][] create2dArray(Film films[]) {
 
@@ -134,6 +102,56 @@ class Film {
       else
         array2d[5][count[5]++] = film;
     }
+
+    return array2d;
+  }
+
+  Film[] getRajiniFilms(Film films[]) {
+    Film[] rajiniFilms = new Film[films.length];
+    int count = 0;
+
+    for(Film film: films) {
+      if((film.leadActor == "rajinikanth" || film.leadActor == "rajini") && (film.language == "tamil"))
+        rajiniFilms[count++] = film;
+    }
+
+    return rajiniFilms;
+  }
+
+  Film[] getComedyFilms(Film films[]) {
+    Film[] comedyFilms = new Film[films.length];
+    int count = 0;
+
+    for(Film film: films) {
+      if(film.category == "comedy")
+        comedyFilms[count++] = film;
+    }
+
+    return comedyFilms;
+  }
+
+  Film[] getComedyFilms(Film films[], String actor) {
+    Film[] comedyFilmsWithActor = new Film[films.length];
+    actor = actor.toLowerCase();
+    int count = 0;
+
+    for(Film film: films) {
+      if(film.category == "comedy" && film.leadActor == actor)
+        comedyFilmsWithActor[count++] = film;
+    }
+
+    return comedyFilmsWithActor;
+  }
+
+  Film getShortestFilm(Film[] films) {
+
+    Film shortestFilm = films[0];
+    for(Film film: films) {
+      if(shortestFilm.getDuration() > film.getDuration())
+        shortestFilm = film;
+    }
+
+    return shortestFilm;
   }
 }
 
@@ -145,7 +163,7 @@ class FilmMain {
 
     int n;
 
-    System.out.print('Enter the number of movies: ');
+    System.out.print("Enter the number of movies: ");
     n = scanner.nextInt();
 
     Film[] films = new Film[n];
@@ -154,30 +172,80 @@ class FilmMain {
 
     for(int i = 0; i<n; i++) {
       System.out.print("Enter film name: ");
-      String fname = br.readline();
+      String fname = br.readLine();
       film.setName(fname);
 
       System.out.print("Enter film language: ");
-      String lang = br.readline();
+      String lang = br.readLine();
       film.setLanguage(lang);
 
       System.out.print("Enter film lead actor: ");
-      String lead = br.readline();
+      String lead = br.readLine();
       film.setLeadActor(lead);
 
       System.out.print("Enter film category: ");
-      String category = br.readline();
+      String category = br.readLine();
       film.setCategory(category);
 
       System.out.print("Enter duration of the film: ");
-      int duration = Integer.parseInt(br.readline());
+      int duration = Integer.parseInt(br.readLine());
       film.setDuration(duration);
 
       System.out.print("Enter the year of release: ");
-      int yor = Integer.parseInt(br.readline());
+      int yor = Integer.parseInt(br.readLine());
       film.setYearOfRelease(yor);
 
       films[numOfFilms++] = film;
+    }
+
+    SourceOfFunctions sof;
+
+    Film[] rajiniFilms = sof.getRajiniFilms(films);
+    Film[] arnoldFilms = sof.getArnoldFilms(films);
+    Film[] comedyFilms = sof.getComedyFilms(films);
+
+    for(Film rajiniFilm: rajiniFilms) {
+      System.out.println("Film name: " + rajiniFilm.name);
+      System.out.println("Film language: " + rajiniFilm.language);
+      System.out.println("Film actor: " + rajiniFilm.leadActor);
+      System.out.println("Film category: " + rajiniFilm.category);
+      System.out.println("Film duration: " + rajiniFilm.duration);
+      System.out.println("Film yearOfRelease: " + rajiniFilm.yearOfRelease);
+    }
+
+    for(Film arnoldFilm: arnoldFilms) {
+      System.out.println("Film name: " + arnoldFilm.name);
+      System.out.println("Film language: " + arnoldFilm.language);
+      System.out.println("Film actor: " + arnoldFilm.leadActor);
+      System.out.println("Film category: " + arnoldFilm.category);
+      System.out.println("Film duration: " + arnoldFilm.duration);
+      System.out.println("Film yearOfRelease: " + arnoldFilm.yearOfRelease);
+    }
+
+    Film shortestFilm = sof.getShortestFilm(arnoldFilms);
+    System.out.println("Shortest Arnold film: " + shortestFilm);
+
+    for(Film comedyFilm: comedyFilms) {
+      System.out.println("Film name: " + comedyFilm.name);
+      System.out.println("Film language: " + comedyFilm.language);
+      System.out.println("Film actor: " + comedyFilm.leadActor);
+      System.out.println("Film category: " + comedyFilm.category);
+      System.out.println("Film duration: " + comedyFilm.duration);
+      System.out.println("Film yearOfRelease: " + comedyFilm.yearOfRelease);
+    }
+
+    System.out.println("Enter the actor to get his comedy movies: ");
+    String actor = br.readLine();
+
+    Film[] actorComedyFilms = sof.getComedyFilms(films, actor);
+
+    for(Film comedyFilm: actorComedyFilms) {
+      System.out.println("Film name: " + comedyFilm.name);
+      System.out.println("Film language: " + comedyFilm.language);
+      System.out.println("Film actor: " + comedyFilm.leadActor);
+      System.out.println("Film category: " + comedyFilm.category);
+      System.out.println("Film duration: " + comedyFilm.duration);
+      System.out.println("Film yearOfRelease: " + comedyFilm.yearOfRelease);
     }
   }
 }
