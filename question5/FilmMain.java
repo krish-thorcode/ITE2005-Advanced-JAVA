@@ -22,26 +22,32 @@ class Film {
 
   public void setName(String name) {
     this.name = name.toLowerCase();
+    System.out.println("setName: " + this.name);
   }
 
   public void setLanguage(String language) {
     this.language = language.toLowerCase();
+    System.out.println("setLanguage: " + this.language);
   }
 
   public void setLeadActor(String leadActor) {
     this.leadActor = leadActor.toLowerCase();
+    System.out.println("setLeadActor: " + this.leadActor);
   }
 
   public void setCategory(String category) {
     this.category = category;
+    System.out.println("setCategory: " + this.category);
   }
 
   public void setDuration(int duration) {
     this.duration = duration;
+    System.out.println("setDuration: " + this.duration);
   }
 
   public void setYearOfRelease(int yearOfRelease) {
     this.yearOfRelease = yearOfRelease;
+    System.out.println("setYOR: " + this.yearOfRelease);
   }
 
 
@@ -52,11 +58,13 @@ class Film {
 
   public String getLanguage() {
     String returnLanguage = this.language.substring(0,1).toUpperCase() + this.language.substring(1);
+    // System.out.println("getlang: " + returnLanguage);
     return returnLanguage;
   }
 
   public String getLeadActor() {
     String returnLeadActor = this.leadActor.substring(0,1).toUpperCase() + this.leadActor.substring(1);
+    // System.out.println("returning lead: " + returnLeadActor);
     return returnLeadActor;
   }
 
@@ -100,11 +108,12 @@ class SourceOfFunctions {
 
   ArrayList<Film> getRajiniFilms(ArrayList<Film> films) {
     ArrayList<Film> rajiniFilms = new ArrayList<Film>();
-    int count = 0;
-
+    // System.out.println("inside getrajini: " + films);
     for(Film film: films) {
-      if((film.getLeadActor() == "rajinikanth" || film.getLeadActor() == "rajini") && (film.getLanguage() == "tamil"))
+      if((film.getLeadActor().equals("Rajinikanth") || film.getLeadActor().equals("Rajini")) && (film.getLanguage().equals("Tamil"))){
+      // System.out.println("adding rajini movie");
         rajiniFilms.add(film);
+      }
     }
 
     return rajiniFilms;
@@ -112,11 +121,13 @@ class SourceOfFunctions {
 
   ArrayList<Film> getArnoldFilms(ArrayList<Film> films) {
     ArrayList<Film> arnoldFilms = new ArrayList<Film>();
-    // int count = 0;
+    // System.out.println("getarnold: " + films);
 
     for(Film film: films) {
-      if((film.getLeadActor() == "arnold" || film.getLeadActor() == "arnold") && (film.getLanguage() == "english"))
+      if((film.getLeadActor().equals("Arnold"))  && (film.getLanguage().equals("English"))) {
         arnoldFilms.add(film);
+        // System.out.println("inside add arnoldfilms");
+      }
     }
 
     return arnoldFilms;
@@ -126,7 +137,7 @@ class SourceOfFunctions {
     ArrayList<Film> comedyFilms = new ArrayList<Film>();
 
     for(Film film: films) {
-      if(film.getCategory() == "comedy")
+      if(film.getCategory().equals("Comedy"))
         comedyFilms.add(film);
     }
 
@@ -135,11 +146,10 @@ class SourceOfFunctions {
 
   ArrayList<Film> getComedyFilms(ArrayList<Film> films, String actor) {
     ArrayList<Film> comedyFilmsWithActor = new ArrayList<Film>();
-    actor = actor.toLowerCase();
-    int count = 0;
+    actor = actor.substring(0,1).toUpperCase() + actor.substring(1);
 
     for(Film film: films) {
-      if(film.getCategory() == "comedy" && film.getLeadActor() == actor)
+      if(film.getCategory().equals("Comedy") && film.getLeadActor().equals(actor))
         comedyFilmsWithActor.add(film);
     }
 
@@ -147,7 +157,6 @@ class SourceOfFunctions {
   }
 
   Film getShortestFilm(ArrayList<Film> films) {
-
     Film shortestFilm = films.get(0);
     for(Film film: films) {
       if(shortestFilm.getDuration() > film.getDuration())
@@ -169,12 +178,16 @@ class FilmMain {
     System.out.print("Enter the number of movies: ");
     n = scanner.nextInt();
 
-    // Film[] films = new Film[n];
     ArrayList<Film> films = new ArrayList<Film>();
-    Film film = new Film();
     int numOfFilms = 0;
 
     for(int i = 0; i<n; i++) {
+
+      // cannot use the same film object that was declared outside the for loop for all films being entered because ArrayList
+      // contains reference to objects, not the objects themselves. each time a new movie info is to be entered, a new reference
+      // should be generated so that the ArrayList will point to different film objects on heap
+      Film film = new Film();
+
       System.out.println("Film " + i + ":");
       System.out.println("-------");
       System.out.print("Enter film name: ");
@@ -202,16 +215,17 @@ class FilmMain {
       film.setYearOfRelease(yor);
 
       films.add(film);
+      // System.out.println("films: " + films.size()); -- outputs correct values for size of film
     }
 
     SourceOfFunctions sof = new SourceOfFunctions();
-
+    // System.out.println("films: " + films.size());-- corect output
     ArrayList<Film> rajiniFilms = sof.getRajiniFilms(films);
-    System.out.println(rajiniFilms.size());
+    // System.out.println(rajiniFilms.size());
     ArrayList<Film> arnoldFilms = sof.getArnoldFilms(films);
-    System.out.println(arnoldFilms.size());
+    // System.out.println(arnoldFilms.size());
     ArrayList<Film> comedyFilms = sof.getComedyFilms(films);
-    System.out.println(comedyFilms.size());
+    // System.out.println(comedyFilms.size());
 
     for(Film rajiniFilm: rajiniFilms) {
       System.out.println("Film name: " + rajiniFilm.getName());
@@ -232,7 +246,7 @@ class FilmMain {
     }
 
     Film shortestFilm = sof.getShortestFilm(arnoldFilms);
-    System.out.println("Shortest Arnold film: " + shortestFilm);
+    System.out.println("Shortest Arnold film: " + shortestFilm.getName());
 
     for(Film comedyFilm: comedyFilms) {
       System.out.println("Film name: " + comedyFilm.getName());
