@@ -87,20 +87,20 @@ class SourceOfFunctions {
   Film[][] create2dArray(Film films[]) {
 
     Film[][] array2d = new Film[6][films.length];
-    int counter[6] = new int[6];
+    int counter[] = new int[6];
     for(Film film: films) {
-      if(film.yearOfRelease == 1971)
-        array2d[0][count[0]++] = film;
-      else if(film.yearOfRelease > 1971 && film.yearOfRelease <=1980 )
-        array2d[1][count[1]++] = film;
-      else if(film.yearOfRelease >= 1981 && film.yearOfRelease <=1990 )
-        array2d[2][count[2]++] = film;
-      else if(film.yearOfRelease > 1991 && film.yearOfRelease <=2000 )
-        array2d[3][count[3]++] = film;
-      else if(film.yearOfRelease > 2001 && film.yearOfRelease <=2010 )
-        array2d[4][count[4]++] = film;
+      if(film.getYearOfRelease() == 1971)
+        array2d[0][counter[0]++] = film;
+      else if(film.getYearOfRelease() > 1971 && film.getYearOfRelease() <=1980 )
+        array2d[1][counter[1]++] = film;
+      else if(film.getYearOfRelease() >= 1981 && film.getYearOfRelease() <=1990 )
+        array2d[2][counter[2]++] = film;
+      else if(film.getYearOfRelease() > 1991 && film.getYearOfRelease() <=2000 )
+        array2d[3][counter[3]++] = film;
+      else if(film.getYearOfRelease() > 2001 && film.getYearOfRelease() <=2010 )
+        array2d[4][counter[4]++] = film;
       else
-        array2d[5][count[5]++] = film;
+        array2d[5][counter[5]++] = film;
     }
 
     return array2d;
@@ -111,11 +111,23 @@ class SourceOfFunctions {
     int count = 0;
 
     for(Film film: films) {
-      if((film.leadActor == "rajinikanth" || film.leadActor == "rajini") && (film.language == "tamil"))
+      if((film.getLeadActor() == "rajinikanth" || film.getLeadActor() == "rajini") && (film.getLanguage() == "tamil"))
         rajiniFilms[count++] = film;
     }
 
     return rajiniFilms;
+  }
+
+  Film[] getArnoldFilms(Film films[]) {
+    Film[] arnoldFilms = new Film[films.length];
+    int count = 0;
+
+    for(Film film: films) {
+      if((film.getLeadActor() == "arnold" || film.getLeadActor() == "arnold") && (film.getLanguage() == "english"))
+        arnoldFilms[count++] = film;
+    }
+
+    return arnoldFilms;
   }
 
   Film[] getComedyFilms(Film films[]) {
@@ -123,7 +135,7 @@ class SourceOfFunctions {
     int count = 0;
 
     for(Film film: films) {
-      if(film.category == "comedy")
+      if(film.getCategory() == "comedy")
         comedyFilms[count++] = film;
     }
 
@@ -136,7 +148,7 @@ class SourceOfFunctions {
     int count = 0;
 
     for(Film film: films) {
-      if(film.category == "comedy" && film.leadActor == actor)
+      if(film.getCategory() == "comedy" && film.getLeadActor() == actor)
         comedyFilmsWithActor[count++] = film;
     }
 
@@ -156,7 +168,7 @@ class SourceOfFunctions {
 }
 
 class FilmMain {
-  public static void main(String args[]) {
+  public static void main(String args[]) throws IOException {
 
     Scanner scanner = new Scanner(System.in);
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -171,6 +183,8 @@ class FilmMain {
     int numOfFilms = 0;
 
     for(int i = 0; i<n; i++) {
+      System.out.println("Film " + i + ":");
+      System.out.println("-------");
       System.out.print("Enter film name: ");
       String fname = br.readLine();
       film.setName(fname);
@@ -198,40 +212,43 @@ class FilmMain {
       films[numOfFilms++] = film;
     }
 
-    SourceOfFunctions sof;
+    SourceOfFunctions sof = new SourceOfFunctions();
 
     Film[] rajiniFilms = sof.getRajiniFilms(films);
+    System.out.println(rajiniFilms.length);
     Film[] arnoldFilms = sof.getArnoldFilms(films);
+    System.out.println(arnoldFilms.length);
     Film[] comedyFilms = sof.getComedyFilms(films);
+    System.out.println(comedyFilms.length);
 
     for(Film rajiniFilm: rajiniFilms) {
-      System.out.println("Film name: " + rajiniFilm.name);
-      System.out.println("Film language: " + rajiniFilm.language);
-      System.out.println("Film actor: " + rajiniFilm.leadActor);
-      System.out.println("Film category: " + rajiniFilm.category);
-      System.out.println("Film duration: " + rajiniFilm.duration);
-      System.out.println("Film yearOfRelease: " + rajiniFilm.yearOfRelease);
+      System.out.println("Film name: " + rajiniFilm.getName());
+      System.out.println("Film language: " + rajiniFilm.getLanguage());
+      System.out.println("Film actor: " + rajiniFilm.getLeadActor());
+      System.out.println("Film category: " + rajiniFilm.getCategory());
+      System.out.println("Film duration: " + rajiniFilm.getDuration());
+      System.out.println("Film yearOfRelease: " + rajiniFilm.getYearOfRelease());
     }
 
     for(Film arnoldFilm: arnoldFilms) {
-      System.out.println("Film name: " + arnoldFilm.name);
-      System.out.println("Film language: " + arnoldFilm.language);
-      System.out.println("Film actor: " + arnoldFilm.leadActor);
-      System.out.println("Film category: " + arnoldFilm.category);
-      System.out.println("Film duration: " + arnoldFilm.duration);
-      System.out.println("Film yearOfRelease: " + arnoldFilm.yearOfRelease);
+      System.out.println("Film name: " + arnoldFilm.getName());
+      System.out.println("Film language: " + arnoldFilm.getLanguage());
+      System.out.println("Film actor: " + arnoldFilm.getLeadActor());
+      System.out.println("Film category: " + arnoldFilm.getCategory());
+      System.out.println("Film duration: " + arnoldFilm.getDuration());
+      System.out.println("Film yearOfRelease: " + arnoldFilm.getYearOfRelease());
     }
 
     Film shortestFilm = sof.getShortestFilm(arnoldFilms);
     System.out.println("Shortest Arnold film: " + shortestFilm);
 
     for(Film comedyFilm: comedyFilms) {
-      System.out.println("Film name: " + comedyFilm.name);
-      System.out.println("Film language: " + comedyFilm.language);
-      System.out.println("Film actor: " + comedyFilm.leadActor);
-      System.out.println("Film category: " + comedyFilm.category);
-      System.out.println("Film duration: " + comedyFilm.duration);
-      System.out.println("Film yearOfRelease: " + comedyFilm.yearOfRelease);
+      System.out.println("Film name: " + comedyFilm.getName());
+      System.out.println("Film language: " + comedyFilm.getLanguage());
+      System.out.println("Film actor: " + comedyFilm.getLeadActor());
+      System.out.println("Film category: " + comedyFilm.getCategory());
+      System.out.println("Film duration: " + comedyFilm.getDuration());
+      System.out.println("Film yearOfRelease: " + comedyFilm.getYearOfRelease());
     }
 
     System.out.println("Enter the actor to get his comedy movies: ");
@@ -240,12 +257,12 @@ class FilmMain {
     Film[] actorComedyFilms = sof.getComedyFilms(films, actor);
 
     for(Film comedyFilm: actorComedyFilms) {
-      System.out.println("Film name: " + comedyFilm.name);
-      System.out.println("Film language: " + comedyFilm.language);
-      System.out.println("Film actor: " + comedyFilm.leadActor);
-      System.out.println("Film category: " + comedyFilm.category);
-      System.out.println("Film duration: " + comedyFilm.duration);
-      System.out.println("Film yearOfRelease: " + comedyFilm.yearOfRelease);
+      System.out.println("Film name: " + comedyFilm.getName());
+      System.out.println("Film language: " + comedyFilm.getLanguage());
+      System.out.println("Film actor: " + comedyFilm.getLeadActor());
+      System.out.println("Film category: " + comedyFilm.getCategory());
+      System.out.println("Film duration: " + comedyFilm.getDuration());
+      System.out.println("Film yearOfRelease: " + comedyFilm.getYearOfRelease());
     }
   }
 }
