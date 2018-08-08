@@ -35,10 +35,11 @@ class ChemicalEquation {
     return allMolecules;
   }
 
-  public void printNumOfMolecules(ArrayList<String> molecules) {
+  public void printNumOfMolecules(ArrayList<String> molecules, String side) {
     String molecule;
     char firstChar;
     int isDigit;
+    System.out.println("Number of molecules " + side +":");
     for(int i=0; i<molecules.size(); i++)
     {
       molecule = molecules.get(i);
@@ -52,7 +53,8 @@ class ChemicalEquation {
 
   public ArrayList<Map<String, Integer>> getElementCount(ArrayList<String> lhsMolecules, ArrayList<String> rhsMolecules) {
     // System.out.println("Brocode: " + lhsMolecules.get(0));
-    String molecule, element;
+    String molecule;
+    String element = "";
     Map<String, Integer> lhsElements = new HashMap<String, Integer>();
     Map<String, Integer> rhsElements = new HashMap<String, Integer>();
     char firstChar, ch;
@@ -67,6 +69,11 @@ class ChemicalEquation {
       // System.out.println("lolggg " + molecule);
 
       for(int j=0; j<molecule.length(); j++) {
+        if(molecule.charAt(j) >= '0' && molecule.charAt(j) <= '9') {
+          System.out.println("bhk " + element);
+          lhsElements.put(element, lhsElements.get(element) + Character.getNumericValue(molecule.charAt(j))); // value of element var is not updated yet, still the same as prev value
+          continue;
+        }
         if(Character.isLowerCase(molecule.charAt(j))) {
           element = molecule.substring(j-1, j+1);
           if(lhsElements.containsKey(element))
@@ -75,7 +82,7 @@ class ChemicalEquation {
             lhsElements.put(element, Character.getNumericValue(firstChar));
         }
         else {
-          element = molecule.substring(j);
+          element = molecule.substring(j, j+1);
           if(lhsElements.containsKey(element))
             lhsElements.put(element, lhsElements.get(element) + Character.getNumericValue(firstChar));
           else
@@ -104,7 +111,7 @@ class ChemicalEquation {
             rhsElements.put(element, Character.getNumericValue(firstChar));
         }
         else {
-          element = molecule.substring(j);
+          element = molecule.substring(j, j+1);
           if(rhsElements.containsKey(element))
             rhsElements.put(element, rhsElements.get(element) + Character.getNumericValue(firstChar));
           else
@@ -127,8 +134,8 @@ public class Generalized {
     ChemicalEquation equation = new ChemicalEquation(eqn);
     ArrayList<ArrayList<String>> allMolecules = equation.getMolecules();
     // System.out.println(allMolecules.get(0).get(0));
-    equation.printNumOfMolecules(allMolecules.get(0));
-    equation.printNumOfMolecules(allMolecules.get(1));
+    equation.printNumOfMolecules(allMolecules.get(0), "LHS");
+    equation.printNumOfMolecules(allMolecules.get(1), "RHS");
 
     ArrayList<Map<String, Integer>> countList = equation.getElementCount(allMolecules.get(0), allMolecules.get(1));
     Map<String, Integer> lhsCount = countList.get(0);

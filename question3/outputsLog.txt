@@ -1,0 +1,95 @@
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ java Generalized
+2NaOH + H2SO4 -> Na2SO4 + 2H2O
+Number of molecules:
+NaOH- 2
+H2SO4- 1
+Number of molecules:
+Na2SO4- 1
+H2O- 2
+LHS elements:
+2 17
+Na 2
+S 17
+4 17
+H 19
+N 2
+O 19
+RHS elements:
+2 25
+Na 23
+S 23
+4 23
+H 2
+N 23
+O 25
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ javac Generalized.java
+Generalized.java:72: error: variable element might not have been initialized
+          lhsElements.put(element, lhsElements.get(element) + Character.getNumericValue(firstChar)); // value of element var is not updated yet, still the same as prev value
+                          ^
+1 error
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ javac Generalized.java
+Generalized.java:72: error: variable element might not have been initialized
+          lhsElements.put(element, lhsElements.get(element) + Character.getNumericValue(molecule.charAt(j))); // value of element var is not updated yet, still the same as prev value
+                          ^
+1 error
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ javac Generalized.java
+Generalized.java:72: error: variable element might not have been initialized
+          System.out.println("bhk " + element);
+                                      ^
+1 error
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ javac Generalized.java
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ java Generalized
+lhsElements.put(element, lhsElements.get(element) + Character.getNumericValue(firstChar));^C^[[Akrish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall/Advanced JAVA/Lab/challenging_exercises/question3$ java Generalized
+2NaOH + H2SO4 -> Na2SO4 + 2H2O
+Number of molecules LHS:
+NaOH- 2
+H2SO4- 1
+Number of molecules RHS:
+Na2SO4- 1
+H2O- 2
+bhk H
+bhk O
+LHS elements:
+Na 2
+S 17
+H 21
+N 2
+O 23
+RHS elements:
+2 25
+Na 23
+S 23
+4 23
+H 2
+N 23
+O 25
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ java Generalized
+3AB + 2B -> 5C
+Number of molecules LHS:
+AB- 3
+B- 2
+Number of molecules RHS:
+C- 5
+LHS elements:
+A 3
+B 5
+RHS elements:
+C 5
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$ java Generalized
+3AB + BC -> 4B + C + 3A
+Number of molecules LHS:
+AB- 3
+BC- 1
+Number of molecules RHS:
+B- 4
+C- 1
+A- 3
+LHS elements:
+A 3
+B 14
+C 11
+RHS elements:
+A 3
+B 4
+C 12
+krish-thorcode@kkm-ubuntu:~/My_files/College_related_stuffs/Fall_2018-19/Courses/Advanced JAVA/Lab/challenging_exercises/question3$
