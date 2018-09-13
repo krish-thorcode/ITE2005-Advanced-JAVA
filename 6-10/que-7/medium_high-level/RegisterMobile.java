@@ -53,7 +53,7 @@ public class RegisterMobile {
       System.out.println(ex.getMessage());
       System.exit(2);
     }
-    catch(InvalidRegistrationNumberException ex) {
+    catch(InvalidMobileNumberException ex) {
       System.out.println(ex.getMessage());
       System.exit(2);
     }
@@ -64,17 +64,17 @@ public class RegisterMobile {
       System.out.println("Invalid");
   }
 
-  static void validateRegNum(String reg)  {
+  static void validateRegNum(String reg) throws InsufficientCharacterLengthException, InvalidRegistrationNumberException {
     if(reg.length() != 9)
-      throw new InsufficientCharacterLengthException("Error: Invalid registration number.");
+      throw new InsufficientCharacterLengthException("Error: Check the length of registration number.");
 
     if(!reg.matches("[A-Za-z0-9]+"))
       throw new InvalidRegistrationNumberException("Error: Invalid registration number.");
   }
 
-  static void validateMobNum(String mobNum) {
+  static void validateMobNum(String mobNum) throws InsufficientCharacterLengthException, InvalidMobileNumberException {
     if(mobNum.length() != 10)
-      throw new InsufficientCharacterLengthException("Error: Invalid mobile number.");
+      throw new InsufficientCharacterLengthException("Error: Check the length of mobile number.");
 
     if(!mobNum.matches("[1-9]{1}[0-9]+"))
       throw new InvalidMobileNumberException("Error: Invalid mobile number.");
