@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
-class Donor {
+class Donor implements Serializable {
   private String name;
   private int age;
   private String address;
@@ -30,10 +30,53 @@ class Donor {
     this.bloodGroup = bloodGroup;
     this.dateOfLastDonation = dateOfLastDonation;
   }
+
+  public void displayDonorDetails() {
+    System.out.println("Name: " + name);
+    System.out.println("Age: " + age);
+    System.out.println("Address: " + address);
+    System.out.println("Contact: " + contactNumber);
+    System.out.println("Blood group: " + bloodGroup);
+    System.out.println("Date of Last Donation: " + dateOfLastDonation);
+  }
+
+  public String getBloodGroup() {
+    return this.bloodGroup;
+  }
+
+  public Date getDateOfLastDonation() {
+    return this.dateOfLastDonation;
+  }
+}
+
+class FileHandlingForDonorList {
+
+  public void writer(List<Donor> donorList) throws Exception {
+
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./donors"));
+
+    oos.writeObject(donorList);
+    oos.flush();
+    oos.close();
+  }
+
+  public List<Donor> reader() throws Exception {
+
+    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./donors"));
+
+    List<Donor> donorList = new ArrayList<Donor>();
+    // Donor donor;
+
+    donorList = (List<Donor>) ois.readObject();
+
+    ois.close();
+
+    return donorList;
+  }
 }
 
 public class LowLevel {
-  public static void main(String args[]) throws Exception{
+  public static void main(String args[]) throws Exception {
 
     String name;
     int age;
@@ -42,8 +85,7 @@ public class LowLevel {
     String bloodGroup;
     Date dateOfLastDonation;
 
-    Donor donor = new Donor();
-    // String dateInput;
+    // Donor donor = new Donor();
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -58,6 +100,7 @@ public class LowLevel {
     List<Donor> donorList = new ArrayList<Donor>();
 
     for(int i = 0; i < n; i++) {
+      Donor donor = new Donor();
       System.out.println("Donor " + i + ": ");
       System.out.print("Name: ");
       name = keyboardBufferedReader.readLine();
@@ -71,11 +114,24 @@ public class LowLevel {
       bloodGroup = keyboardBufferedReader.readLine();
       System.out.print("Date (dd-MM-yyyy): ");
       dateOfLastDonation = sdf.parse(keyboardBufferedReader.readLine());
-      // sdf.parse(dateOfLastDonation);
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
       donorList.add(donor);
+    }
 
+
+    FileHandlingForDonorList fileHandler = new FileHandlingForDonorList();
+    fileHandler.writer(donorList);
+
+    List<Donor> donorListReadFromFile = fileHandler.reader();
+
+    System.out.println();
+    for(int i = 0; i < donorListReadFromFile.size(); i++) {
+
+      if(donorListReadFromFile.get(i).getBloodGroup().equals("A+")) {
+        if(new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime() >= 6*30*86400000)
+          donorListReadFromFile.get(i).displayDonorDetails();
+      }
       System.out.println();
     }
   }
