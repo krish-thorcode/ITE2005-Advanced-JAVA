@@ -35,6 +35,8 @@ class QueensLand extends ThemePark {
 
 	public QueensLand(int numAdults, int numChildren) {
 		super(numAdults, numChildren);
+    for(int i=0; i<numGames; i++)
+      games[i] = false;
 	}
 
 	boolean playGame() { // returns true if the game initiated successfully
@@ -62,15 +64,18 @@ class VeegaLand extends ThemePark {
 			games[i] = 0;
 	}
 
+	// this constructor has no utility at low-level (single person)
 	public VeegaLand(int numAdults, int numChildren) {
 		super(numAdults, numChildren);
+    for(int i=0; i<numGames; i++)
+      games[i] = 0;
 	}
 
 	boolean playGame() { // returns true if the game initiated successfully
 		System.out.print("Enter the game code: ");
 		this.gameCode = keyboard.nextInt();
 
-		if(this.games[gameCode] == 1) {
+		if(this.games[gameCode] > 0) {
 			System.out.print("Replay? Enter 1 for 'Yes' and 2 for 'No'");
 			this.replay = keyboard.nextInt();
 
@@ -93,7 +98,7 @@ class VeegaLand extends ThemePark {
 public class SinglePlayer {
 	public static void main(String args[]) {
 
-		int numAdults, numChildren;
+		int numAdults, numChildren; // these variables will not get used in low-level, will be used in mid-level
 		int endGame = 0, ageGroup;
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Queensland!");
@@ -101,10 +106,12 @@ public class SinglePlayer {
 		// QueensLand ql = new QueensLand();
 
 		// boolean played = q1.playGame();
+    QueensLand ql;
+    System.out.println("-------Queensland---------");
 		System.out.println("Are you a grown up or still a baby (no offence!)? 1 - Baby, 0 - Grown up");
 		ageGroup = keyboard.nextInt();
 
-		QueensLand ql;
+
 
 		if(ageGroup == 1)
 			ql = new QueensLand(0, 1);
@@ -122,8 +129,32 @@ public class SinglePlayer {
 			}
 		}
 
-		int totalCost = ql.totalCost();
+    int totalCost = ql.totalCost();
 		System.out.println("Total cost: " + totalCost);
+
+
+    VeegaLand vl;
+    System.out.println("------Veegaland-------");
+    System.out.println("Are you a grown up or still a baby (no offence!)? 1 - Baby, 0 - Grown up");
+		ageGroup = keyboard.nextInt();
+
+		if(ageGroup == 1)
+			vl = new VeegaLand(0, 1);
+		else
+			vl = new VeegaLand(1, 0);
+
+		endGame = 0;
+		while(endGame != 1) {
+			boolean played = vl.playGame();
+			if(played == true)
+				System.out.println("Played successfully!");
+			else {
+				// System.out.println("You seem to have already played the game, want to ?");
+				System.out.println("Do you want to quit playing? 1 - Yes, 0 - No ");
+				endGame = keyboard.nextInt();
+			}
+		}
+
+		System.out.println("Total cost: " + vl.totalCost());
 	}
 }
-		
