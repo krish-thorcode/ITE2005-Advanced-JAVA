@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
@@ -55,9 +57,15 @@ class Donor implements Serializable {
 
 class FileHandlingForDonorList {
 
+  private String fileName;
+
+  public FileHandlingForDonorList(String fileName) {
+    this.fileName = fileName;
+  }
+
   public void writer(List<Donor> donorList) throws Exception {
 
-    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./donors"));
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
 
     oos.writeObject(donorList);
     oos.flush();
@@ -66,7 +74,7 @@ class FileHandlingForDonorList {
 
   public List<Donor> reader() throws Exception {
 
-    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./donors"));
+    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
 
     List<Donor> donorList = new ArrayList<Donor>();
     // Donor donor;
@@ -78,8 +86,20 @@ class FileHandlingForDonorList {
     return donorList;
   }
 
-  public Set<Donor> createRepository() {
-    Set<Donor> donorSet = new HashSet()
+  public Set<Donor> createRepository(List<Donor> donorList_1, List<Donor> donorList_2) throws Exception{
+
+    List<Donor> donorList = new ArrayList<Donor> (donorList_1);
+    donorList.addAll(donorList_2);
+    Set<Donor> donorSet = new HashSet(donorList);
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+
+    oos.writeObject(donorSet);
+    oos.flush();
+    oos.close();
+
+    return donorSet;
+
+
   }
 }
 
@@ -102,10 +122,11 @@ public class HighLevel {
 
     Scanner keyboardScanner = new Scanner(System.in);
 
-    System.out.println("Enter the number of regular donors in Vellore: ");
+    System.out.println("Bloood Bank 1:");
+    System.out.println("Enter the number of regular donors in Vellore under Bank-1: ");
     n = keyboardScanner.nextInt();
 
-    List<Donor> donorList = new ArrayList<Donor>();
+    List<Donor> donorList_1 = new ArrayList<Donor>();
 
     for(int i = 0; i < n; i++) {
       Donor donor = new Donor();
@@ -124,23 +145,49 @@ public class HighLevel {
       dateOfLastDonation = sdf.parse(keyboardBufferedReader.readLine());
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
-      donorList.add(donor);
+      donorList_1.add(donor);
+    }
+// -----------------------------------------------------------------
+    System.out.println("Bloood Bank 2:");
+    System.out.println("Enter the number of regular donors in Vellore under Bank-1: ");
+    n = keyboardScanner.nextInt();
+
+    List<Donor> donorList_2 = new ArrayList<Donor>();
+
+    for(int i = 0; i < n; i++) {
+      Donor donor = new Donor();
+      System.out.println("Donor " + i + ": ");
+      System.out.print("Name: ");
+      name = keyboardBufferedReader.readLine();
+      System.out.print("Age: ");
+      age = keyboardScanner.nextInt();
+      System.out.print("Address: ");
+      address = keyboardBufferedReader.readLine();
+      System.out.print("Contact number: ");
+      contactNumber = keyboardScanner.nextInt();
+      System.out.print("Blood group: ");
+      bloodGroup = keyboardBufferedReader.readLine();
+      System.out.print("Date (dd-MM-yyyy): ");
+      dateOfLastDonation = sdf.parse(keyboardBufferedReader.readLine());
+
+      donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
+      donorList_2.add(donor);
     }
 
 
-    FileHandlingForDonorList fileHandler = new FileHandlingForDonorList();
-    fileHandler.writer(donorList);
 
-    List<Donor> donorListReadFromFile = fileHandler.reader();
+    FileHandlingForDonorList fileHandler_1 = new FileHandlingForDonorList("./donors_1");
+    fileHandler_1.writer(donorList_1);
+
+    FileHandlingForDonorList fileHandler_2 = new FileHandlingForDonorList("./donors_2");
+    fileHandler_2.writer(donorList_2);
+
+    List<Donor> donorListReadFromFile_1 = fileHandler_1.reader();
+    List<Donor> donorListReadFromFile_2 = fileHandler_2.reader();
 
     System.out.println();
-    for(int i = 0; i < donorListReadFromFile.size(); i++) {
 
-      if(donorListReadFromFile.get(i).getBloodGroup().equals("A+")) {
-        if(new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime() >= 6*30*86400000)
-          donorListReadFromFile.get(i).displayDonorDetails();
-      }
-      System.out.println();
-    }
+    FileHandlingForDonorList fileHandler_repo = new FileHandlingForDonorList("./repo");
+    fileHandler_repo.createRepository(donorListReadFromFile_1, donorListReadFromFile_2);
   }
 }
