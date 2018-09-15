@@ -100,8 +100,8 @@ public class PRSelection {
     for(int i = 0; i < numofStudents; i++)
       votes[i] = randomVoteGenerator.nextInt(3) + 1;
 
-    for(int i = 0; i < numofStudents; i++)
-      System.out.println("Votes:\n" + votes[i]);
+    // for(int i = 0; i < numofStudents; i++)
+    //   System.out.println("Votes:\n" + votes[i]);
 
     Counter voteCounter = new Counter(votes, numOfCounterThreads);
     int voteCountList[] = voteCounter.countVotes();
