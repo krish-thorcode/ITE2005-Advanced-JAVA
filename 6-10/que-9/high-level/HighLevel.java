@@ -2,8 +2,6 @@ import java.util.Scanner;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
@@ -53,6 +51,18 @@ class Donor implements Serializable {
   public void updateDateofLastDonation(Date dateOfLastDonation) {
     this.dateOfLastDonation = dateOfLastDonation;
   }
+
+  public boolean isSameAs(Donor donor) {
+    // System.out.println("in isSameAs()");
+    // if(!this.dateOfLastDonation.after( donor.dateOfLastDonation) && !this.dateOfLastDonation.before(donor.dateOfLastDonation))
+    //   System.out.println("checking if date comparision works");
+    if(this.name.equals(donor.name) && this.age == donor.age && this.address.equals(donor.address) && this.contactNumber == donor.contactNumber && this.bloodGroup.equals(donor.bloodGroup) && (!this.dateOfLastDonation.after( donor.dateOfLastDonation) && !this.dateOfLastDonation.before(donor.dateOfLastDonation))) {
+      // System.out.println("checking if condition was true");
+      return true;
+    }
+    else
+      return false;
+  }
 }
 
 class FileHandlingForDonorList {
@@ -85,37 +95,49 @@ class FileHandlingForDonorList {
     return donorList;
   }
 
-  public Set<Donor> createRepository(List<Donor> donorList_1, List<Donor> donorList_2) throws Exception {
+  public List<Donor> createRepository(List<Donor> donorList_1, List<Donor> donorList_2) throws Exception {
 
-    List<Donor> donorList = new ArrayList<Donor> (donorList_1);
-    donorList.addAll(donorList_2);
-    Set<Donor> donorSet = new HashSet(donorList);
-    System.out.println("set size: " + donorSet.size());
+    List<Donor> donorListOfUniqueElements = new ArrayList<Donor> (donorList_1);
+
+    boolean duplicateFound;
+
+    for(Donor donor: donorList_2) {
+      duplicateFound = false;
+      for(Donor uniqueDonorElement: donorListOfUniqueElements) {
+        if(donor.isSameAs(uniqueDonorElement)) {
+          duplicateFound = true;
+          break;
+        }
+        else
+          continue;
+      }
+      if(duplicateFound == false)
+        donorListOfUniqueElements.add(donor);
+    }
+
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+    oos.writeObject(donorListOfUniqueElements);
+    oos.flush();
+    oos.close();
+    // System.out.println("set size: " + donorSet.size());
     // for(Donor donor: donorSet){
     //   dono
     // }
-
-    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-
-    oos.writeObject(donorSet);
-    oos.flush();
-    oos.close();
-
-    return donorSet;
+    return donorListOfUniqueElements;
   }
 
-  public Set<Donor> readRepository() throws Exception {
-
-    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
-
-    Set<Donor> donorSet = new HashSet<Donor>();
-
-    donorSet = (Set<Donor>) ois.readObject();
-
-    ois.close();
-
-    return donorSet;
-  }
+  // public Set<Donor> readRepository() throws Exception {
+  //
+  //   ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+  //
+  //   Set<Donor> donorSet = new HashSet<Donor>();
+  //
+  //   donorSet = (Set<Donor>) ois.readObject();
+  //
+  //   ois.close();
+  //
+  //   return donorSet;
+  // }
 }
 
 public class HighLevel {
@@ -206,12 +228,12 @@ public class HighLevel {
     FileHandlingForDonorList fileHandler_repo = new FileHandlingForDonorList("./repo");
     fileHandler_repo.createRepository(donorListReadFromFile_1, donorListReadFromFile_2);
 
-    Set<Donor> donorSetFromRepo = fileHandler_repo.readRepository();
+    List<Donor> donorListReadFromRepo = fileHandler_repo.reader();
 
     System.out.println();
     System.out.println("-Repository-");
 
-    for(Donor donor: donorSetFromRepo) {
+    for(Donor donor: donorListReadFromRepo) {
       donor.displayDonorDetails();
       System.out.println();
     }
