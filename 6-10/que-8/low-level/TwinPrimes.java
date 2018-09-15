@@ -43,7 +43,7 @@ public class TwinPrimes {
             nextLowerLimit = i+2;
           }
           else
-            nextLowerLimit = i+3; // since i+2 is not prime, we can start the next iteration from i+3
+            nextLowerLimit = ++i; // since i+2 is not prime, we can start the next iteration from i+3
         }
         else {
           nextLowerLimit = ++i;

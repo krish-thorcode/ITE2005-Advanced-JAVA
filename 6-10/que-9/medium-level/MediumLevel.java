@@ -40,6 +40,10 @@ class Donor implements Serializable {
     System.out.println("Date of Last Donation: " + dateOfLastDonation);
   }
 
+  public String getNameOfDonor() {
+    return this.name;
+  }
+
   public String getBloodGroup() {
     return this.bloodGroup;
   }
@@ -105,7 +109,7 @@ public class MediumLevel {
 
     for(int i = 0; i < n; i++) {
       Donor donor = new Donor();
-      System.out.println("Donor " + i + ": ");
+      System.out.println("-Donor " + i + "-");
       System.out.print("Name: ");
       name = keyboardBufferedReader.readLine();
       System.out.print("Age: ");
@@ -121,6 +125,7 @@ public class MediumLevel {
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
       donorList.add(donor);
+      System.out.println();
     }
 
 
@@ -130,13 +135,76 @@ public class MediumLevel {
     List<Donor> donorListReadFromFile = fileHandler.reader();
 
     System.out.println();
+    long numberOfMilliSecondsInOneMonth = 30L*86400000L;
+    long currentDayEpochMilliSeconds = new Date().getTime();
+    long donorMilliSecondsTimeOfLastDonation;
+    // System.out.println("ms in a month " + numberOfMilliSecondsInOneMonth);
+    System.out.println("-Donors who can donate- ");
     for(int i = 0; i < donorListReadFromFile.size(); i++) {
 
       if(donorListReadFromFile.get(i).getBloodGroup().equals("A+")) {
-        if(new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime() >= 6*30*86400000)
+        // System.out.println((new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime())/numberOfMilliSecondsInOneMonth);
+        donorMilliSecondsTimeOfLastDonation = donorListReadFromFile.get(i).getDateOfLastDonation().getTime();
+        if((currentDayEpochMilliSeconds - donorMilliSecondsTimeOfLastDonation)/numberOfMilliSecondsInOneMonth >= 6) {
           donorListReadFromFile.get(i).displayDonorDetails();
+        }
       }
       System.out.println();
     }
+
+    System.out.println("------Donate (for registered donors)-------");
+
+    // Donor donor = new Donor();
+    System.out.println("-New Donor-");
+    System.out.print("Name: ");
+    name = keyboardBufferedReader.readLine();
+    // System.out.print("Age: ");
+    // age = keyboardScanner.nextInt();
+    // System.out.print("Address: ");
+    // address = keyboardBufferedReader.readLine();
+    // System.out.print("Contact number: ");
+    // contactNumber = keyboardScanner.nextInt();
+    // System.out.print("Blood group: ");
+    // bloodGroup = keyboardBufferedReader.readLine();
+    // System.out.print("Date (dd-MM-yyyy): ");
+    // dateOfLastDonation = sdf.parse(keyboardBufferedReader.readLine());
+
+    // donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
+
+    int indexOfDonorInList;
+    for(Donor donor: donorListReadFromFile) {
+      if(donor.getNameOfDonor().equals(name)) {
+        indexOfDonorInList = donorListReadFromFile.indexOf(donor);
+        Donor temp = donorListReadFromFile.get(indexOfDonorInList);
+        temp.updateDateofLastDonation(new Date());
+        donorListReadFromFile.set(indexOfDonorInList, temp);
+      }
+    }
+    // fileHandler = new FileHandlingForDonorList();
+    // updating the list of donors as the date of donation for one donor has been modified
+    fileHandler.writer(donorListReadFromFile);
+    System.out.println("File updated.");
+    // reading the updated file
+    donorListReadFromFile = fileHandler.reader();
+
+    System.out.println();
+    System.out.println("-Updated contents of the file-");
+    for(int i = 0; i < donorListReadFromFile.size(); i++) {
+      donorListReadFromFile.get(i).displayDonorDetails();
+      System.out.println(); // for new line
+    }
+
+
+
+    // donorList.add(donor);
+
+    // for(int i = 0; i < donorListReadFromFile.size(); i++) {
+    //
+    //   if(donorListReadFromFile.get(i).getBloodGroup().equals("A+")) {
+    //     if((new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime())/(86400000*30) >= 6)
+    //       donorListReadFromFile.get(i).displayDonorDetails();
+    //   }
+    //   System.out.println();
+    // }
   }
 }

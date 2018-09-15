@@ -77,7 +77,6 @@ class FileHandlingForDonorList {
     ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
 
     List<Donor> donorList = new ArrayList<Donor>();
-    // Donor donor;
 
     donorList = (List<Donor>) ois.readObject();
 
@@ -86,11 +85,16 @@ class FileHandlingForDonorList {
     return donorList;
   }
 
-  public Set<Donor> createRepository(List<Donor> donorList_1, List<Donor> donorList_2) throws Exception{
+  public Set<Donor> createRepository(List<Donor> donorList_1, List<Donor> donorList_2) throws Exception {
 
     List<Donor> donorList = new ArrayList<Donor> (donorList_1);
     donorList.addAll(donorList_2);
     Set<Donor> donorSet = new HashSet(donorList);
+    System.out.println("set size: " + donorSet.size());
+    // for(Donor donor: donorSet){
+    //   dono
+    // }
+
     ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
 
     oos.writeObject(donorSet);
@@ -98,8 +102,19 @@ class FileHandlingForDonorList {
     oos.close();
 
     return donorSet;
+  }
 
+  public Set<Donor> readRepository() throws Exception {
 
+    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+
+    Set<Donor> donorSet = new HashSet<Donor>();
+
+    donorSet = (Set<Donor>) ois.readObject();
+
+    ois.close();
+
+    return donorSet;
   }
 }
 
@@ -130,7 +145,7 @@ public class HighLevel {
 
     for(int i = 0; i < n; i++) {
       Donor donor = new Donor();
-      System.out.println("Donor " + i + ": ");
+      System.out.println("-Donor " + i + "- ");
       System.out.print("Name: ");
       name = keyboardBufferedReader.readLine();
       System.out.print("Age: ");
@@ -146,8 +161,10 @@ public class HighLevel {
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
       donorList_1.add(donor);
+      System.out.println();
     }
 // -----------------------------------------------------------------
+    System.out.println();
     System.out.println("Bloood Bank 2:");
     System.out.println("Enter the number of regular donors in Vellore under Bank-1: ");
     n = keyboardScanner.nextInt();
@@ -156,7 +173,7 @@ public class HighLevel {
 
     for(int i = 0; i < n; i++) {
       Donor donor = new Donor();
-      System.out.println("Donor " + i + ": ");
+      System.out.println("-Donor " + i + "-");
       System.out.print("Name: ");
       name = keyboardBufferedReader.readLine();
       System.out.print("Age: ");
@@ -172,9 +189,8 @@ public class HighLevel {
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
       donorList_2.add(donor);
+      System.out.println();
     }
-
-
 
     FileHandlingForDonorList fileHandler_1 = new FileHandlingForDonorList("./donors_1");
     fileHandler_1.writer(donorList_1);
@@ -189,5 +205,19 @@ public class HighLevel {
 
     FileHandlingForDonorList fileHandler_repo = new FileHandlingForDonorList("./repo");
     fileHandler_repo.createRepository(donorListReadFromFile_1, donorListReadFromFile_2);
+
+    Set<Donor> donorSetFromRepo = fileHandler_repo.readRepository();
+
+    System.out.println();
+    System.out.println("-Repository-");
+
+    for(Donor donor: donorSetFromRepo) {
+      donor.displayDonorDetails();
+      System.out.println();
+    }
+    // for(int i = 0; i < donorSetFromRepo.size(); i++) {
+    //   donorSetFromRepo.get(i).displayDonorDetails();
+    //   System.out.println(); // for new line
+    // }
   }
 }

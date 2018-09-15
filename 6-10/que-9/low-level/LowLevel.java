@@ -117,6 +117,7 @@ public class LowLevel {
 
       donor.createDonor(name, age, address, contactNumber, bloodGroup, dateOfLastDonation);
       donorList.add(donor);
+      System.out.println();
     }
 
 
@@ -126,13 +127,17 @@ public class LowLevel {
     List<Donor> donorListReadFromFile = fileHandler.reader();
 
     System.out.println();
+    long numberOfMilliSecondsInOneMonth = 30L*86400000L;
+    long currentDayEpochMilliSeconds = new Date().getTime();
+    long donorMilliSecondsTimeOfLastDonation;
+    System.out.println("-Donors who can donate-");
     for(int i = 0; i < donorListReadFromFile.size(); i++) {
 
-      if(donorListReadFromFile.get(i).getBloodGroup().equals("A+")) {
-        if(new Date().getTime() - donorListReadFromFile.get(i).getDateOfLastDonation().getTime() >= 6*30*86400000)
+      donorMilliSecondsTimeOfLastDonation = donorListReadFromFile.get(i).getDateOfLastDonation().getTime();
+      if((currentDayEpochMilliSeconds - donorMilliSecondsTimeOfLastDonation)/numberOfMilliSecondsInOneMonth >= 6) {
           donorListReadFromFile.get(i).displayDonorDetails();
       }
-      System.out.println();
     }
+      System.out.println();
   }
 }
